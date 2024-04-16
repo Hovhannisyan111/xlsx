@@ -23,16 +23,14 @@ def chars_dict(cnt):
 
 def create_workbook(output):
     workbook = xlsxwriter.Workbook(output)
-    worksheet = workbook.add_worksheet()
-    return workbook, worksheet
+    worksheet = workbook.add_worksheet("Letters")
+    worksheet2 = workbook.add_worksheet("Numbers")
+    worksheet3 = workbook.add_worksheet("Symbols")
+    return workbook, worksheet, worksheet2, worksheet3
 
-def excel(workbook, worksheet, numbers, symbols, vowels, consonants):
-    worksheet.write(0, 0, "Letters")
-    worksheet.write(1, 0, "Vowels")
-    worksheet.write(0, 1, "Numbers")
-    worksheet.write(0, 2, "Symbols")
-
-    row = 2
+def excel(workbook, worksheet, worksheet2,worksheet3, numbers, symbols, vowels, consonants):
+    worksheet.write(0, 0, "Vowels")
+    row = 1
     for v, count in sorted(vowels.items(), key=lambda x: x[1], reverse=True):
         worksheet.write(row, 0, v + ":" + str(count))
         row += 1
@@ -42,20 +40,20 @@ def excel(workbook, worksheet, numbers, symbols, vowels, consonants):
     for c, count in sorted(consonants.items(), key=lambda x: x[1], reverse=True):
         worksheet.write(row, 0, c +":" + str(count))
         row += 1  
-    row = 1
+    row = 0
     for n, count in sorted(numbers.items(), key=lambda x: x[1], reverse=True):
-        worksheet.write(row, 1, n + ":" + str(count))
+        worksheet2.write(row, 0, n + ":" + str(count))
         row += 1
-    row = 1
+    row = 0
     for s, count in sorted(symbols.items(), key=lambda x: x[1], reverse=True):
-        worksheet.write(row, 2, s + ":" + str(count))
+        worksheet3.write(row, 0, s + ":" + str(count))
         row += 1
 
 def main():
     cnt = get_content("db.txt")
     numbers, symbols, vowels, consonants = chars_dict(cnt)
-    workbook, worksheet = create_workbook('ex.xlsx')
-    excel(workbook, worksheet, numbers, symbols, vowels, consonants)
+    workbook, worksheet, worksheet2, worksheet3 = create_workbook('ex.xlsx')
+    excel(workbook, worksheet, worksheet2, worksheet3, numbers, symbols, vowels, consonants)
     workbook.close()
 
 if __name__ == "__main__":
